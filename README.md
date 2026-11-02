@@ -3,7 +3,7 @@
 Análise e modelo com a [base pública da Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce): onde o atraso se concentra, quanto ele pesa na nota e se dá para prevê-lo na hora da compra.
 
 - **Notebook completo, com gráficos:** [notebooks/atraso_entrega.ipynb](notebooks/atraso_entrega.ipynb)
-- **No Kaggle:** ainda não publicado
+- **No Kaggle:** [Atraso de entrega na Olist: dados e modelo](https://www.kaggle.com/code/gavetacmd/atraso-de-entrega-na-olist-dados-e-modelo)
 
 > **Sobre o uso de IA:** este projeto foi desenvolvido com apoio de um assistente de IA (Claude Code), que escreveu o código e rodou a análise, a partir do plano que defini.
 
