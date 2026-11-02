@@ -6,14 +6,23 @@
 # 1. **Onde o atraso se concentra, e quanto ele pesa na nota?**
 # 2. **Dá para prever, na hora da compra, quais pedidos vão atrasar?**
 #
-# **Resumo.** O atraso atinge 6,8% dos pedidos e vem em picos: três meses têm 22% dos pedidos e 48% dos atrasos. A nota média cai de 4,29 para 2,27 quando a entrega atrasa. O modelo parecia bom na validação (ROC-AUC de 0,74), mas caiu para 0,60 no teste, porque o padrão de atraso mudou no meio de 2018. **A principal conclusão: nesta base, o que se sabe na hora da compra não basta para prever atraso em um período novo.**
+# **Resumo.** O atraso atinge 6,8% dos pedidos e vem em picos: três meses têm 22% dos pedidos e 48% dos atrasos. A nota média cai de 4,29 para 2,27 quando a entrega atrasa. O modelo parecia bom na validação (ROC-AUC perto de 0,75), mas caiu para perto de 0,60 no teste, porque o padrão de atraso mudou no meio de 2018. **A principal conclusão: nesta base, o que se sabe na hora da compra não basta para prever atraso em um período novo.**
 #
 # Cada etapa explica a decisão tomada. As conclusões usam só o que os dados sustentam; o que é hipótese está marcado como hipótese.
+#
+# **Sobre os números do XGBoost:** eles mudam um pouco entre ambientes. No teste, o ROC-AUC foi de 0,597 na execução publicada no GitHub e de 0,611 na primeira execução no Kaggle, com o mesmo código e os mesmos dados. A análise e a regressão logística não mudaram, e as conclusões são as mesmas nos dois casos.
 
 # %% [markdown]
 # ## 1. Preparação
 #
 # Todos os arquivos são lidos como texto, com conversão explícita de cada coluna, para nenhuma sujeira passar em silêncio. As validações interrompem a execução quando falham.
+
+# %%
+# Os resultados do XGBoost mudam um pouco entre ambientes, então as versões usadas ficam registradas aqui.
+import importlib.metadata
+import platform
+
+print("Python", platform.python_version(), "|", " | ".join(f"{p} {importlib.metadata.version(p)}" for p in ("xgboost", "scikit-learn", "pandas", "numpy")))
 
 # %%
 import os
@@ -668,6 +677,7 @@ display(Markdown(f"""
 
 # %%
 conferir = {"atraso": (TAXA, 0.068), "pedidos nos picos": (len(pico) / len(base), 0.22), "atrasos nos picos": (pico["atrasou"].sum() / base["atrasou"].sum(), 0.48),
-            "nota no prazo": (NOTA_NO_PRAZO, 4.29), "nota com atraso": (NOTA_ATRASO, 2.27), "ROC validação": (linhas[ESCOLHIDA]["ROC-AUC"], 0.74), "ROC teste": (M_XGB["ROC-AUC"], 0.60)}
-divergentes = {k: round(float(v), 3) for k, (v, esperado) in conferir.items() if abs(v - esperado) > 0.01}
+            "nota no prazo": (NOTA_NO_PRAZO, 4.29), "nota com atraso": (NOTA_ATRASO, 2.27), "ROC validação": (linhas[ESCOLHIDA]["ROC-AUC"], 0.75), "ROC teste": (M_XGB["ROC-AUC"], 0.60)}
+# O ROC do XGBoost tem folga maior porque mudou entre ambientes: 0,743 e 0,597 no GitHub, 0,749 e 0,611 no Kaggle.
+divergentes = {k: round(float(v), 3) for k, (v, esperado) in conferir.items() if abs(v - esperado) > (0.015 if k.startswith("ROC") else 0.01)}
 print("Resumo confere com a execução." if not divergentes else f"ATENÇÃO: o resumo não bate com esta execução: {divergentes}")

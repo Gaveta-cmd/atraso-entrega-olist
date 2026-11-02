@@ -19,6 +19,8 @@ Análise e modelo com a [base pública da Olist](https://www.kaggle.com/datasets
 
 O intervalo de 95% do ROC-AUC no teste vai de 0,575 a 0,617. A regressão logística foi melhor no teste (0,669), mas o modelo foi escolhido antes, pela validação, e não troquei depois de ver o resultado. Ela também é fraca, e eu não colocaria nenhum dos dois em produção.
 
+Os números do XGBoost nesta página vêm da execução do `.ipynb` deste repositório. No Kaggle, com o mesmo código, os mesmos dados e a mesma versão do XGBoost, mas outras versões de pandas, NumPy e scikit-learn, a validação dá 0,749 e o teste dá 0,611. Não investiguei a causa exata. A análise e a regressão logística não mudam, e as conclusões são as mesmas.
+
 **Por que caiu:** o padrão mudou no período de teste. O prazo prometido mediano foi de 27,3 dias em junho para 13,5 em agosto, e o atraso do RJ foi de 14,7% no treino para 3,2% no teste. Em agosto, o ROC-AUC do modelo foi de 0,447, pior que um sorteio. Essa explicação veio depois de ver o teste, então é um diagnóstico, não uma prova.
 
 **A lição:** a divisão aleatória e a validação temporal prometiam quase o mesmo número, e nenhuma antecipou a queda. Treinando mês a mês antes do teste, o ROC-AUC varia de 0,613 a 0,761, e os meses da validação estavam entre os melhores. Uma validação temporal única também pode enganar.
