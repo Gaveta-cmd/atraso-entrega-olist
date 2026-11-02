@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.claude/
+.ipynb_checkpoints/
+
+# a base da Olist não é redistribuída aqui: baixe do Kaggle
+data/
+*.csv
+*.zip
